@@ -8,20 +8,20 @@ output:
     toc_float: true
     df_print: paged
 editor_options: 
-  chunk_output_type: inline
+  chunk_output_type: console
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(
-	echo = FALSE,
-	message = FALSE,
-	warning = FALSE
+  echo = FALSE,
+  message = FALSE,
+  warning = FALSE
 )
 
 
 ```
 
-## Introduction
+# 1. Introduction
 
 **Motivating question: why is there no Wawa foods in my neighborhood?**
 
@@ -29,23 +29,154 @@ knitr::opts_chunk$set(
 
 To explore this hypothesis we will use [Yelp's publicly available data ](https://www.yelp.com/dataset)of businesses in their database. We will use ZCTA level neighborhood characteristics which has been put together as a part of the BCHC COVID Inequities Project.
 
-## Data
+# 2. Data
 
-### Yelp
-
-Below is a preview of the Yelp data. It name, ZCTA, coordinate and some boolean attributes: grocery, healthy grocery, food, fast food.
-
-```{r}
-## Load Dependencies
+```{r echo=TRUE}
+## Dependencies
 library(tidyr)
 library(dplyr)
 library(leaflet)
+library(purrr)
+library(shiny)
 library(ggplot2)
 library(plotly)
 library(reactable)
+library(sf)
+library(sjPlot)
 load("../Data/Clean/analysis_bundle.rdata")
-
-
-clean__tidy_yelp %>% slice(1:25) %>%  reactable()
-
 ```
+
+## 2.1 Yelp data
+
+Below is a preview of the Yelp data. The fields included in this dataset include: 
+- Business Name 
+- ZCTA 
+- coordinate 
+- Attribute
+
+```{r}
+clean__tidy_yelp %>% 
+  arrange(city, zcta) %>% 
+  slice(1:20) %>%  
+  reactable(defaultPageSize = 5)
+```
+
+The following outcome variables (4) are available:
+
+- grocery
+- healthy grocery
+- food (restaurante)
+- fast food (restaurante)
+
+
+## 2.2 Neighborhood data
+
+We operationalize ACS data ZCTA-level to create neighborhood level indicators. A preview of the data looks like this: 
+
+```{r}
+clean__zcta_indicators %>% 
+  select(zcta, city, outcome_label, value) %>% 
+  arrange(outcome_label, zcta) %>% 
+  slice(1:20) %>%  
+  reactable(defaultPageSize = 5)
+```
+
+
+
+```{r eval=FALSE, include=FALSE}
+unique(clean__zcta_indicators$outcome_label) %>% paste( collapse = ' - ')
+```
+
+The following exposure variables (28) are available:
+- COVID Local Risk Index 
+- ICE  NH Black 
+- ICE - Hispanic
+- ICE - Income 
+- ICE - Income + Black 
+- ICE - Income + People of Color 
+- ICE - Occupation + Black 
+- % Complete College 
+- % Overcrowding 
+- % Limited English 
+- % Foreign Born 
+- % Healthcare Worker 
+- % Hispanic 
+- % Complete High School 
+- % NH Asian/PI 
+- % NH Black 
+- % NH Native American 
+- % NH White 
+- % Poverty 
+- % Production Worker 
+- % Service Worker
+- % Using Public Transit 
+- % Not Insured 
+- Social Vulnerability Index (SVI) 
+- SVI - Socioeconomic 
+- SVI - Household Composition & Disability 
+- SVI - Minority Status & Language 
+- SVI -  Housing Type & Transportation
+
+# 3. Analysis
+
+**Simple analysis in this section will examine the relationship between neighborhood level % poverty and whether a neighborhood has a healthy grocery store in the city of Austin, TX** We will first visualize this data and then do some simple models. The data used for the analysis is pulled and previewed here:
+
+```{r echo=TRUE}
+## Temporary vars
+cityTmp  = "Austin"
+exposureTmp = "% Complete College"
+outcomeTmp = "healthy_grocery"
+
+## Pull data
+source("R/Figures/code_prep_data_for_analysis.R")
+dataTmp = prep_data_for_analysis(cityTmp, 
+                                 exposureTmp, 
+                                 outcomeTmp)
+```
+
+```{r}
+## Preview Data
+dataTmp$dfMerge %>% 
+  rename(!!dataTmp$exposureObj$name := exposure_value,
+         !!dataTmp$outcomeObj$name := outcome_value) %>% 
+  slice(1:5) %>% 
+  reactable()
+```
+
+## 3.1 Stratified Visualization
+
+```{r echo=TRUE}
+source("R/Figures/code_make_boxplot.R")
+make_boxplot(dataTmp)
+```
+
+
+
+## 3.2 Map
+
+```{r echo=TRUE}
+source("R/Figures/code_make_map.R")
+make_map(dataTmp,shape_file_zcta )
+```
+
+
+
+## 3.3 Model
+
+```{r echo=TRUE}
+## logistic model
+model = glm(outcome_value~exposure_value ,family=binomial(link='logit'),data=dataTmp$dfMerge)
+
+## model results
+tab_model(model)
+```
+
+
+# 4. Why build an App?
+
+We wrote prepared a bunch of data and wrote code to do this analysis. But lets say the complexity of our data increase: we want to present this results of this analysis but scaled to multiple Cities, Outcomes and Exposures. If we continue on this static document route we could end up with hundreds of figures (4 outcomes * 28 exposures * many cities), which is not an accessible way to display so much information. 
+
+One of the uses of Shiny is that it enables us to build a web application that allows for accessible exploration high dimension data while using existing R code. **We will now recycle the data and R code used in this analysis to build a Shiny app that displays results across multiple cities, outcomes and exposures.**
+
+
+

@@ -14,16 +14,22 @@
 
 { # 1. Prep data for analysis
   
-  ## Load
+  ## Data
   load('R/Import Yelp Data/processed data/clean__tidy_yelp.rdata')
   load('R/Neigborhood Data/processed data/clean__zcta_indicators.rdata')
-
   
-  ## Save
+  ## Spatial
+  load('Clean/sf_zcta_bchc_simp.rdata')
+  shape_file_zcta = sf_zcta_bchc_simp
+  
+  ## Save machine readable data
   fwrite(clean__tidy_yelp,file = 'Clean/clean__tidy_yelp.csv')
   fwrite(clean__zcta_indicators,file = 'Clean/clean__zcta_indicators.csv')
-  save(clean__tidy_yelp, clean__tidy_yelp, file = "Clean/analysis_bundle.rdata")
-
+  
+  ## Save Data Store for Analysis App
+  save(clean__tidy_yelp, clean__zcta_indicators,shape_file_zcta, file = "Clean/analysis_bundle.rdata")
+  save(clean__tidy_yelp, clean__zcta_indicators,shape_file_zcta, file = "../App/R/Data/analysis_bundle.rdata")
+  
 }
 
 

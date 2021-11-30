@@ -19,8 +19,10 @@
 { # 1. Yelp Data  ---- 
   
   ## Stream in NDJSON (Newline deliminted JSON)
-  yelp_raw  = stream_in(file("raw data/yelp_academic_dataset_business.json")) %>% 
-    as_tibble() 
+  # yelp_raw  = stream_in(file("raw data/yelp_academic_dataset_business.json")) %>% 
+  #   as_tibble() 
+  # save(yelp_raw, file ="processed data/yelp_raw.rdata")
+  load('processed data/yelp_raw.rdata')
   
   ## Subset
   df_subset = yelp_raw %>% 
@@ -28,7 +30,7 @@
            lat= latitude, lng = longitude, 
            stars, review_count, 
            categories) %>% 
-    filter(city%in%c("Austin","Portland","Boston")) 
+    filter(city%in%c("Austin","Boston")) 
     
   
   ## Clean attributes 
@@ -38,12 +40,14 @@
            healthy_grocery = str_detect(categories,'Health Markets'),
            food = str_detect(categories,"Restaurants"),
            fast_food =str_detect(categories,"Fast Food")) %>% 
-    select(name, city, zcta, lat, lng, stars, review_count, grocery, healthy_grocery, food, fast_food)
-
+    select(name, city, zcta, lat, lng, stars, review_count, grocery, healthy_grocery, food, fast_food) %>% 
+    filter(!is.na(grocery),
+           !(!grocery&!healthy_grocery&!food&!fast_food))
   
   ## Output 
   clean__tidy_yelp = df_cleaned
-  }
+  
+}
  
 
 { # 2. Save-----

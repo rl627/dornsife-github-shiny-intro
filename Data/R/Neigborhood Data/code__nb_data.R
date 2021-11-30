@@ -19,7 +19,8 @@
 }
 
 { # 1. ZCTA level data  ---- 
-  clean__zcta_indicators = tidy_zip_exposures
+  clean__zcta_indicators = tidy_zip_exposures %>% 
+    filter(city%in%c("Austin","Boston"))
 }
  
 
