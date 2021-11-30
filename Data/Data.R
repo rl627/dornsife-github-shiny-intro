@@ -28,8 +28,7 @@
   
   ## Save Data Store for Analysis App
   save(clean__tidy_yelp, clean__zcta_indicators,shape_file_zcta, file = "Clean/analysis_bundle.rdata")
-  save(clean__tidy_yelp, clean__zcta_indicators,shape_file_zcta, file = "../App/R/Data/analysis_bundle.rdata")
-  
+
 }
 
 
