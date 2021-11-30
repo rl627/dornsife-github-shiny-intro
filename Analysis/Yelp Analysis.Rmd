@@ -1,0 +1,51 @@
+---
+title: "Yelp Analysis"
+author: "Ran Li"
+date: "11/30/2021"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    df_print: paged
+editor_options: 
+  chunk_output_type: inline
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+	echo = FALSE,
+	message = FALSE,
+	warning = FALSE
+)
+
+
+```
+
+## Introduction
+
+**Motivating question: why is there no Wawa foods in my neighborhood?**
+
+**Hypothesis: Neighborhood level characteristics influence locations of restaurants/grocery stores**
+
+To explore this hypothesis we will use [Yelp's publicly available data ](https://www.yelp.com/dataset)of businesses in their database. We will use ZCTA level neighborhood characteristics which has been put together as a part of the BCHC COVID Inequities Project.
+
+## Data
+
+### Yelp
+
+Below is a preview of the Yelp data. It name, ZCTA, coordinate and some boolean attributes: grocery, healthy grocery, food, fast food.
+
+```{r}
+## Load Dependencies
+library(tidyr)
+library(dplyr)
+library(leaflet)
+library(ggplot2)
+library(plotly)
+library(reactable)
+load("../Data/Clean/analysis_bundle.rdata")
+
+
+clean__tidy_yelp %>% slice(1:25) %>%  reactable()
+
+```
