@@ -19,7 +19,6 @@ This folder contains the code for our Shiny application.
 ### Fork repository
 
 To use this repository students should "Fork" or make a disconnect copy of this repository by click the Fork button (highlighted in the picture below).
-![image](https://user-images.githubusercontent.com/45013044/144135483-53faeee7-455a-44e4-9caa-4915b69918a6.png)
 
 <img src="https://user-images.githubusercontent.com/45013044/144135483-53faeee7-455a-44e4-9caa-4915b69918a6.png"  height="200">
 
