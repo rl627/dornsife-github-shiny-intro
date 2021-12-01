@@ -38,6 +38,11 @@ server <- function(input, output) {
     cityTmp  = "Austin"; exposureTmp = "% Complete College"; outcomeTmp = "healthy_grocery"
     dataTmp = prep_data_for_analysis(cityTmp,  exposureTmp,   outcomeTmp)
     
+    output$boxplot = renderPlotly({
+        ### 3. Boxplot
+        make_boxplot(dataTmp)
+    })
+    
 }
 
 # Run the application 
