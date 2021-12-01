@@ -24,7 +24,7 @@ ui <- fluidPage(
     sidebarLayout(
         sidebarPanel(
             selectInput(
-                inputId="select", 
+                inputId="exposure", 
                 label ="Select Exposure:", 
                 choices = unique(clean__zcta_indicators$outcome_label),
                 selected = "% Complete College")
