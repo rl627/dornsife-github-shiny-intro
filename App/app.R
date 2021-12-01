@@ -33,7 +33,7 @@ ui <- fluidPage(
            tabsetPanel(
                tabPanel("Boxplot", plotlyOutput('boxplot')),
                tabPanel("Map", leafletOutput('map')),
-               tabPanel("Model Result","Model Result")
+               tabPanel("Model Result",uiOutput('model'))
            )
         )
     )
@@ -45,9 +45,7 @@ server <- function(input, output) {
     output$boxplot = renderPlotly({
         
         ## 2. Subset Data
-        dataTmp = prep_data_for_analysis("Austin",  
-                                         input$exposure,   
-                                         "healthy_grocery")
+        dataTmp = prep_data_for_analysis("Austin",  input$exposure,   "healthy_grocery")
         
         ### 3. Boxplot
         make_boxplot(dataTmp)
@@ -64,6 +62,18 @@ server <- function(input, output) {
         make_map(dataTmp,shape_file_zcta)
     })
     
+    output$model = renderUI({
+        
+        ## 2. Subset Data
+        dataTmp = prep_data_for_analysis("Austin",  
+                                         input$exposure,   
+                                         "healthy_grocery")
+        
+        ### 5. Model
+        model = glm(outcome_value~exposure_value ,family=binomial(link='logit'),data=dataTmp$dfMerge)
+        modeltab <- tab_model(model)
+        HTML(modeltab$knitr)
+    })
     
 }
 
