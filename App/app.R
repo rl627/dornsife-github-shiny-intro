@@ -16,17 +16,17 @@ source("R/Figures/code_make_map.R", local = T)
 
 # Define UI for application
 ui <- fluidPage(
-
+    
     # Application title
     titlePanel("Yelp Shiny App"),
-
+    
     # Sidebar layout 
     sidebarLayout(
         sidebarPanel(
-           "Inputs Here"
+            "Inputs Here"
         ),
         mainPanel(
-           "Outputs Here"
+            plotlyOutput('boxplot')
         )
     )
 )
