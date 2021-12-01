@@ -186,7 +186,8 @@ We wrote prepared a bunch of data and wrote code to do this analysis. But lets s
 
 One of the uses of Shiny is that it enables us to build a web application that allows for accessible exploration high dimension data while using existing R code. Our current analysis codebase is only 30 lines of code consisting of five sections: 1) dependencies 2) prepare data 3) visualizing data 4) mapping data 5) modeling data
 
-**We will now recycle the data and R code used in this analysis to build a Shiny app that displays results across multiple cities, outcomes and exposures.**
+**We will now recycle the data and R code used in this analysis to build a Shiny app that displays results across multiple cities, outcomes and exposures. [See here for tutorial](https://github.com/rl627/dornsife-github-shiny-intro/discussions/categories/shiny-steps
+) **
 
 ```
 ### 1. Dependencies
