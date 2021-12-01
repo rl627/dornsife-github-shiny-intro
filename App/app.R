@@ -1,3 +1,4 @@
+## 1. Dependencies
 library(tidyr)
 library(dplyr)
 library(leaflet)
