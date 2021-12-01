@@ -16,13 +16,15 @@ This folder contains the code for our Shiny application.
 
 # How to use this repository?
 
-### 1. Fork Respository: 
+### 1. View Demo Repo and Analysis Report
+
+[Demo Repo](https://github.com/rl627/dornsife-github-shiny-intro)
+[Analysis Results](https://rpubs.com/ranli2011/841599)
+
+### 2. Fork Respository: 
 
 [Fork Instructions](https://github.com/rl627/dornsife-github-shiny-intro/discussions/18) 
 
-### 2. View Analysis Report
-
-[Analysis Results](https://rpubs.com/ranli2011/841599)
 
 ### 3. Follow Tutorial to translate Analysis to Shiny App
 
