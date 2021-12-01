@@ -16,17 +16,16 @@ This folder contains the code for our Shiny application.
 
 # How to use this repository?
 
-### Fork repository
+### 1. Fork Respository: 
 
-To use this repository students should "Fork" or make a disconnect copy of this repository by click the Fork button (highlighted in the picture below).
+[Fork Instructions](https://github.com/rl627/dornsife-github-shiny-intro/discussions/18) 
 
-<img src="https://user-images.githubusercontent.com/45013044/144135483-53faeee7-455a-44e4-9caa-4915b69918a6.png"  height="200">
+### 2. View Analysis Report
+
+[Analysis Results](https://rpubs.com/ranli2011/841599)
+
+### 3. Follow Tutorial to translate Analysis to Shiny App
+
+[Shiny Tutorial: steps 1-9](https://github.com/rl627/dornsife-github-shiny-intro/discussions/categories/shiny-steps)
 
 
-### Steps/Tutorial for Shiny Example
-
-https://github.com/rl627/dornsife-github-shiny-intro/discussions/categories/shiny-steps
-
-### Q&A discussion can be create/viewed
-
-https://github.com/rl627/dornsife-github-shiny-intro/discussions/categories/q-a
