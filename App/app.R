@@ -38,11 +38,13 @@ ui <- fluidPage(
 # Define server logic 
 server <- function(input, output) {
     
-    ## 2. Subset Data
-    cityTmp  = "Austin"; exposureTmp = "% Complete College"; outcomeTmp = "healthy_grocery"
-    dataTmp = prep_data_for_analysis(cityTmp,  exposureTmp,   outcomeTmp)
-    
     output$boxplot = renderPlotly({
+        
+        ## 2. Subset Data
+        dataTmp = prep_data_for_analysis("Austin",  
+                                         input$exposure,   
+                                         "healthy_grocery")
+        
         ### 3. Boxplot
         make_boxplot(dataTmp)
     })
