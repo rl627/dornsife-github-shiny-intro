@@ -23,7 +23,11 @@ ui <- fluidPage(
     # Sidebar layout 
     sidebarLayout(
         sidebarPanel(
-            "Inputs Here"
+            selectInput(
+                inputId="select", 
+                label ="Select Exposure:", 
+                choices = unique(clean__zcta_indicators$outcome_label),
+                selected = "% Complete College")
         ),
         mainPanel(
             plotlyOutput('boxplot')
