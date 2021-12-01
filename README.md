@@ -19,6 +19,7 @@ This folder contains the code for our Shiny application.
 ### 1. View Demo Repo and Analysis Report
 
 [Demo Repo](https://github.com/rl627/dornsife-github-shiny-intro)
+
 [Analysis Results](https://rpubs.com/ranli2011/841599)
 
 ### 2. Fork Respository: 
