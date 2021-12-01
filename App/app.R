@@ -32,7 +32,7 @@ ui <- fluidPage(
         mainPanel(
            tabsetPanel(
                tabPanel("Boxplot", plotlyOutput('boxplot')),
-               tabPanel("Map", "Map"),
+               tabPanel("Map", leafletOutput('map')),
                tabPanel("Model Result","Model Result")
            )
         )
@@ -52,6 +52,18 @@ server <- function(input, output) {
         ### 3. Boxplot
         make_boxplot(dataTmp)
     })
+    
+    output$map = renderLeaflet({
+        
+        ## 2. Subset Data
+        dataTmp = prep_data_for_analysis("Austin",  
+                                         input$exposure,   
+                                         "healthy_grocery")
+        
+        ### 3. Boxplot
+        make_map(dataTmp,shape_file_zcta)
+    })
+    
     
 }
 
