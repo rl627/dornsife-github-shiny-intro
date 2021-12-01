@@ -30,7 +30,11 @@ ui <- fluidPage(
                 selected = "% Complete College")
         ),
         mainPanel(
-            plotlyOutput('boxplot')
+           tabsetPanel(
+               tabPanel("Boxplot", plotlyOutput('boxplot')),
+               tabPanel("Map", "Map"),
+               tabPanel("Model Result","Model Result")
+           )
         )
     )
 )
