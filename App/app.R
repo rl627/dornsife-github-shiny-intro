@@ -34,6 +34,10 @@ ui <- fluidPage(
 # Define server logic 
 server <- function(input, output) {
     
+    ## 2. Subset Data
+    cityTmp  = "Austin"; exposureTmp = "% Complete College"; outcomeTmp = "healthy_grocery"
+    dataTmp = prep_data_for_analysis(cityTmp,  exposureTmp,   outcomeTmp)
+    
 }
 
 # Run the application 
