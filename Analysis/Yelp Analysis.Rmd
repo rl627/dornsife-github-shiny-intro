@@ -31,6 +31,8 @@ To explore this hypothesis we will use [Yelp's publicly available data ](https:/
 
 # 2. Data
 
+## 2.1 Dependencies
+
 ```{r echo=TRUE}
 ## Dependencies
 library(tidyr)
@@ -43,10 +45,13 @@ library(plotly)
 library(reactable)
 library(sf)
 library(sjPlot)
-load("../Data/Clean/analysis_bundle.rdata")
+load("R/Data/analysis_bundle.rdata")
+source("R/Figures/code_prep_data_for_analysis.R")
+source("R/Figures/code_make_boxplot.R")
+source("R/Figures/code_make_map.R")
 ```
 
-## 2.1 Yelp data
+## 2.2 Yelp data
 
 Below is a preview of the Yelp data. The fields included in this dataset include: 
 - Business Name 
@@ -69,7 +74,7 @@ The following outcome variables (4) are available:
 - fast food (restaurante)
 
 
-## 2.2 Neighborhood data
+## 2.3 Neighborhood data
 
 We operationalize ACS data ZCTA-level to create neighborhood level indicators. A preview of the data looks like this: 
 
@@ -88,6 +93,7 @@ unique(clean__zcta_indicators$outcome_label) %>% paste( collapse = ' - ')
 ```
 
 The following exposure variables (28) are available:
+
 - COVID Local Risk Index 
 - ICE  NH Black 
 - ICE - Hispanic
@@ -119,7 +125,11 @@ The following exposure variables (28) are available:
 
 # 3. Analysis
 
-**Simple analysis in this section will examine the relationship between neighborhood level % poverty and whether a neighborhood has a healthy grocery store in the city of Austin, TX** We will first visualize this data and then do some simple models. The data used for the analysis is pulled and previewed here:
+**Simple analysis in this section will examine the relationship between neighborhood level %  Complete College and whether a neighborhood has a healthy grocery store in the city of Austin, TX** We will first visualize this data and then do some simple models. The data used for the analysis is pulled and previewed here:
+
+## 3.1 Prepare Data
+
+For this analysis we are only interested in a subset of the data. We assign some temporary variables for the city, exposure and outcome we are interested in and then pull this subset from our data store. 
 
 ```{r echo=TRUE}
 ## Temporary vars
@@ -128,11 +138,12 @@ exposureTmp = "% Complete College"
 outcomeTmp = "healthy_grocery"
 
 ## Pull data
-source("R/Figures/code_prep_data_for_analysis.R")
 dataTmp = prep_data_for_analysis(cityTmp, 
                                  exposureTmp, 
                                  outcomeTmp)
 ```
+
+A preview of the data looks like this:
 
 ```{r}
 ## Preview Data
@@ -143,30 +154,27 @@ dataTmp$dfMerge %>%
   reactable()
 ```
 
-## 3.1 Stratified Visualization
+## 3.2  Visualize Data
 
 ```{r echo=TRUE}
-source("R/Figures/code_make_boxplot.R")
 make_boxplot(dataTmp)
 ```
 
 
 
-## 3.2 Map
+## 3.3 Map Data
 
 ```{r echo=TRUE}
-source("R/Figures/code_make_map.R")
 make_map(dataTmp,shape_file_zcta )
 ```
 
 
 
-## 3.3 Model
+## 3.4 Model Data
 
 ```{r echo=TRUE}
 ## logistic model
 model = glm(outcome_value~exposure_value ,family=binomial(link='logit'),data=dataTmp$dfMerge)
-
 ## model results
 tab_model(model)
 ```
@@ -176,7 +184,41 @@ tab_model(model)
 
 We wrote prepared a bunch of data and wrote code to do this analysis. But lets say the complexity of our data increase: we want to present this results of this analysis but scaled to multiple Cities, Outcomes and Exposures. If we continue on this static document route we could end up with hundreds of figures (4 outcomes * 28 exposures * many cities), which is not an accessible way to display so much information. 
 
-One of the uses of Shiny is that it enables us to build a web application that allows for accessible exploration high dimension data while using existing R code. **We will now recycle the data and R code used in this analysis to build a Shiny app that displays results across multiple cities, outcomes and exposures.**
+One of the uses of Shiny is that it enables us to build a web application that allows for accessible exploration high dimension data while using existing R code. Our current analysis codebase is only 30 lines of code consisting of five sections: 1) dependencies 2) prepare data 3) visualizing data 4) mapping data 5) modeling data
+
+**We will now recycle the data and R code used in this analysis to build a Shiny app that displays results across multiple cities, outcomes and exposures.**
+
+```
+### 1. Dependencies
+library(tidyr)
+library(dplyr)
+library(leaflet)
+library(purrr)
+library(shiny)
+library(ggplot2)
+library(plotly)
+library(reactable)
+library(sf)
+library(sjPlot)
+load("R/Data/analysis_bundle.rdata")
+source("R/Figures/code_prep_data_for_analysis.R")
+source("R/Figures/code_make_boxplot.R")
+source("R/Figures/code_make_map.R")
 
 
+### 2. Preparing 
+cityTmp  = "Austin"; exposureTmp = "% Complete College"; outcomeTmp = "healthy_grocery"
+dataTmp = prep_data_for_analysis(cityTmp,  exposureTmp,   outcomeTmp)
 
+### 3. Visualizing
+make_boxplot(dataTmp)
+
+### 4. Maping 
+make_map(dataTmp,shape_file_zcta )
+
+### 4. Modeling 
+model = glm(outcome_value~exposure_value ,family=binomial(link='logit'),data=dataTmp$dfMerge)
+tab_model(model)
+```
+
+ 
